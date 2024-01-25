@@ -18,9 +18,16 @@ class BearerSecuritySchemeTest {
         assertThat(request.headers[AUTHORIZATION]).startsWith("Bearer ")
     }
 
+
     @Test
-    fun `Bearer security scheme matches requests with authorization header set`() {
+    fun `Bearer security scheme matches requests with upper case authorization header set`() {
         val requestWithBearer = HttpRequest(method = "POST", path = "/customer", headers = mapOf(AUTHORIZATION to "Bearer foo"))
+        assertThat(scheme.matches(requestWithBearer).isSuccess()).isTrue
+    }
+
+    @Test
+    fun `Bearer security scheme matches requests with lower case authorization header set`() {
+        val requestWithBearer = HttpRequest(method = "POST", path = "/customer", headers = mapOf("authorization" to "bearer foo"))
         assertThat(scheme.matches(requestWithBearer).isSuccess()).isTrue
     }
 
